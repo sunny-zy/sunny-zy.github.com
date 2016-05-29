@@ -2,7 +2,8 @@ $(function(){
 	var oContainer = document.getElementById('container');
 	var aPage = oContainer.children;
 	var oP1Left = document.getElementById('p1Left');
-	
+	var oRing = document.getElementById('ring');
+	var aCircle = oRing.getElementsByTagName('ol')[0].children;
 	var iNow = 0;// 当前屏
 	var bScroll = true;//初始化状态，可以滚动
 
@@ -27,11 +28,13 @@ $(function(){
 			if(iNow == aPage.length){
 				iNow =0;
 			}
+			sideNav(iNow);
 		}else{
 			iNow--;
 			if(iNow <= 0){
 				iNow = 0;
-			}	
+			}
+			sideNav(iNow);	
 		}
 		move(oContainer,{marginTop:-iNow*oPageH},{
 			complete:function(){
@@ -64,5 +67,28 @@ $(function(){
 			}
 		},50)
 
-	})()
+	})();
+
+	//侧边栏
+	(function(){
+		for(var i = 0; i < aCircle.length; i++){
+			(function(index){
+				aCircle[i].onmouseover = function(){
+					sideNav(index);
+					move(oContainer,{marginTop:-index*oPageH},{
+						complete:function(){
+							bScroll = true;
+						}
+					});	
+				}
+			})(i)
+		}
+	})();
+	// 侧边导航
+	function sideNav(index){
+		for(var i = 0; i < aCircle.length; i++){
+			aCircle[i].className = '';
+		}
+		aCircle[index].className = 'active';
+	}
 })
